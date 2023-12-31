@@ -6,7 +6,6 @@ import { readItems, readItem } from "@directus/sdk";
 export async function getStaticPaths() {
   const pages = await directus.request(readItems("pages"));
   const paths = pages.map((page) => ({ params: { slug: page.slug } }));
-  console.log(paths);
 
   return paths
 }
@@ -14,7 +13,6 @@ const { slug } = Astro.params;
 
 
 const page = await directus.request(readItem('pages', slug));
-console.log(page)
 ---
 
 <Layout title={page.title}>

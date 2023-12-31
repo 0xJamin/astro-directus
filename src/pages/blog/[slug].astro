@@ -3,12 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import directus from "../../lib/directus";
 import { readItems, readItem } from "@directus/sdk";
 
-type Pages = {
-  slug: string;
-  title: string;
-  content: string;
-  excerpt: string;
-};
 export async function getStaticPaths() {
   const posts = await directus.request(readItems("posts"));
   const paths = posts.map((post) => ({ params: { slug: post.slug } }));

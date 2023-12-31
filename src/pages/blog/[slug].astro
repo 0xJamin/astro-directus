@@ -1,0 +1,36 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import directus from "../../lib/directus";
+import { readItems, readItem } from "@directus/sdk";
+
+type Pages = {
+  slug: string;
+  title: string;
+  content: string;
+  excerpt: string;
+};
+export async function getStaticPaths() {
+  const posts = await directus.request(readItems("posts"));
+  const paths = posts.map((post) => ({ params: { slug: post.slug } }));
+  console.log(paths)
+
+  return paths
+}
+const { slug } = Astro.params;
+
+
+const post = await directus.request(readItem('posts', slug,{
+	fields: ['*', { relation: ['*'] }],
+}));
+console.log(post.image)
+---
+
+<Layout title={post.title}>
+  <main>
+    <img src={`http://localhost:8055/assets/${post.image}?width=500`} />
+    <h1>{post.title}</h1>
+    <div set:html={post.content} />
+  </main>
+</Layout>
+
+<style></style>
